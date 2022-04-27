@@ -12,7 +12,7 @@ public class GuiButtonWithImage extends GuiButton {
 	private static final ResourceLocation customButtonTextures = new ResourceLocation("ias", "textures/gui/custombutton.png");
 	public final Runnable action;
 	public GuiButtonWithImage(int x, int y, Runnable p) {
-		super(p.hashCode(), x, y, 20, 20, "ButterDog");
+		super(104027, x, y, 20, 20, "ButterDog");
 		this.action = p;
 	}
 	
