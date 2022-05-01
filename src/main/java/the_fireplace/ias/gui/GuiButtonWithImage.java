@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 /**
  * The button with the image on it.
@@ -14,7 +14,7 @@ public class GuiButtonWithImage extends ButtonWidget {
 	private static final Identifier customButtonTextures = new Identifier("ias", "textures/gui/custombutton.png");
 
 	public GuiButtonWithImage(int x, int y, PressAction p) {
-		super(x, y, 20, 20, new LiteralText("ButterDog"), p);
+		super(x, y, 20, 20, Text.literal("ButterDog"), p);
 	}
 	
 	@Override

@@ -1,11 +1,11 @@
 plugins {
-	id 'fabric-loom' version '0.10.+'
+	id 'fabric-loom' version '0.12.+'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-archivesBaseName = "InGameAccountSwitcher-Fabric-1.18"
+archivesBaseName = "InGameAccountSwitcher-Fabric-1.19"
 version = System.getProperty("ias.version", "unknown")
 
 repositories {
@@ -13,11 +13,11 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.18"
-    mappings "net.fabricmc:yarn:1.18+build.1:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.12.8"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.40.8+1.17"
-	modImplementation "com.terraformersmc:modmenu:3.0.0"
+	minecraft "com.mojang:minecraft:22w17a"
+    mappings "net.fabricmc:yarn:22w17a+build.5:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.14.3"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.51.3+1.19"
+	modImplementation "com.terraformersmc:modmenu:4.0.0-beta.4"
 }
 
 tasks.withType(JavaCompile).configureEach {

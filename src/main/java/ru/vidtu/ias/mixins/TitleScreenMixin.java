@@ -1,5 +1,7 @@
 package ru.vidtu.ias.mixins;
 
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.Text;
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -9,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.TranslatableText;
 import ru.vidtu.ias.Config;
 import ru.vidtu.ias.IASMMPos;
 import ru.vidtu.ias.utils.Expression;
@@ -58,6 +59,6 @@ public class TitleScreenMixin extends Screen {
 
 	@Inject(method = "render", at = @At("TAIL"))
 	public void onRender(MatrixStack ms, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-		drawCenteredText(ms, textRenderer, new TranslatableText("ias.loggedinas", client.getSession().getUsername()), textX, textY, 0xFFCC8888);
+		drawCenteredText(ms, textRenderer, Text.literal(I18n.translate("ias.loggedinas", client.getSession().getUsername())), textX, textY, 0xFFCC8888);
 	}
 }

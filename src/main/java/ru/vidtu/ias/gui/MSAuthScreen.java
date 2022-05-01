@@ -22,7 +22,6 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import ru.vidtu.ias.Config;
 import ru.vidtu.ias.account.Account;
@@ -45,12 +44,12 @@ public class MSAuthScreen extends Screen {
 	public final Screen prev;
 	private HttpServer srv;
 	private int tick;
-	private Text state = new TranslatableText("ias.msauth.checkbrowser");
+	private Text state = Text.literal(I18n.translate("ias.msauth.checkbrowser"));
 	private List<OrderedText> error;
 	private Consumer<Account> handler;
 	
 	public MSAuthScreen(Screen prev, Consumer<Account> handler) {
-		super(new TranslatableText("ias.msauth.title"));
+		super(Text.literal(I18n.translate("ias.msauth.title")));
 		this.prev = prev;
 		this.handler = handler;
 		String done = "<html><body><h1>" + I18n.translate("ias.msauth.canclosenow") + "</h1></body></html>";
@@ -119,10 +118,10 @@ public class MSAuthScreen extends Screen {
 	
 	private void auth(String query) {
 		try {
-			state = new TranslatableText("ias.msauth.progress");
+			state = Text.literal(I18n.translate("ias.msauth.progress"));
 			if (query == null) throw new NullPointerException("query=null");
 			if (query.equals("error=access_denied&error_description=The user has denied access to the scope requested by the client application."))
-				throw new AuthException(new TranslatableText("ias.msauth.error.revoked"));
+				throw new AuthException(Text.literal(I18n.translate("ias.msauth.error.revoked")));
 			if (!query.startsWith("code=")) throw new IllegalStateException("query=" + query);
 			Pair<String, String> authRefreshTokens = Auth.authCode2Token(query.replace("code=", ""));
 			String refreshToken = authRefreshTokens.getRight();
@@ -132,7 +131,7 @@ public class MSAuthScreen extends Screen {
 			Auth.checkGameOwnership(accessToken);
 			Pair<UUID, String> profile = Auth.getProfile(accessToken);
 			if (Config.accounts.stream().anyMatch(acc -> acc.alias().equalsIgnoreCase(profile.getRight())))
-				throw new AuthException(new TranslatableText("ias.auth.alreadyexists"));
+				throw new AuthException(Text.literal(I18n.translate("ias.auth.alreadyexists")));
 			client.execute(() -> {
 				if (client.currentScreen == this) {
 					handler.accept(new MicrosoftAccount(profile.getRight(), accessToken, refreshToken, profile.getLeft()));
@@ -150,14 +149,14 @@ public class MSAuthScreen extends Screen {
 			if (t instanceof AuthException) {
 				error = textRenderer.wrapLines(((AuthException)t).getText(), width - 20);
 			} else {
-				error = textRenderer.wrapLines(new TranslatableText("ias.auth.unknown", t.toString()), width - 20);
+				error = textRenderer.wrapLines(Text.literal(I18n.translate("ias.auth.unknown", t.toString())), width - 20);
 			}
 		});
 	}
 
 	@Override
 	public void init() {
-		addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height - 28, 150, 20, new TranslatableText("gui.cancel"), btn -> client.setScreen(prev)));
+		addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height - 28, 150, 20, Text.literal(I18n.translate("gui.cancel")), btn -> client.setScreen(prev)));
 	}
 	
 	@Override

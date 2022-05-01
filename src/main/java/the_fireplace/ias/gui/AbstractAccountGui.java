@@ -3,6 +3,7 @@ package the_fireplace.ias.gui;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.minecraft.client.resource.language.I18n;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -11,7 +12,6 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import ru.vidtu.ias.Config;
 import ru.vidtu.ias.account.Account;
 import ru.vidtu.ias.account.AuthException;
@@ -45,21 +45,21 @@ public class AbstractAccountGui extends Screen {
 	@Override
 	public void init() {
 		complete = addDrawableChild(new ButtonWidget(this.width / 2 - 152, this.height - 28, 150, 20, this.title, btn -> end()));
-		addDrawableChild(new ButtonWidget(this.width / 2 + 2, this.height - 28, 150, 20, new TranslatableText("gui.cancel"), btn -> client.setScreen(prev)));
-		username = addDrawableChild(new TextFieldWidget(this.textRenderer, this.width / 2 - 100, 60, 200, 20, new TranslatableText("ias.username")));
+		addDrawableChild(new ButtonWidget(this.width / 2 + 2, this.height - 28, 150, 20, Text.literal(I18n.translate("gui.cancel")), btn -> client.setScreen(prev)));
+		username = addDrawableChild(new TextFieldWidget(this.textRenderer, this.width / 2 - 100, 60, 200, 20, Text.literal(I18n.translate("ias.username"))));
 		username.setMaxLength(512);
-		password = addDrawableChild(new GuiPasswordField(this.textRenderer, this.width / 2 - 100, 90, 200, 20, new TranslatableText("ias.password")));
+		password = addDrawableChild(new GuiPasswordField(this.textRenderer, this.width / 2 - 100, 90, 200, 20, Text.literal(I18n.translate("ias.password"))));
 		password.setMaxLength(512);
 		complete.active = false;
-		addDrawableChild(new ButtonWidget(this.width / 2 - 50, this.height / 3 * 2, 100, 20, new TranslatableText("ias.msauth.btn"), btn -> client.setScreen(new MSAuthScreen(prev, handler))));
+		addDrawableChild(new ButtonWidget(this.width / 2 - 50, this.height / 3 * 2, 100, 20, Text.literal(I18n.translate("ias.msauth.btn")), btn -> client.setScreen(new MSAuthScreen(prev, handler))));
 	}
 	
 	@Override
 	public void render(MatrixStack ms, int mx, int my, float delta) {
 		renderBackground(ms);
 		drawCenteredText(ms, textRenderer, this.title, this.width / 2, 7, -1);
-		drawCenteredText(ms, textRenderer, new TranslatableText("ias.username"), this.width / 2 - 130, 66, -1);
-		drawCenteredText(ms, textRenderer, new TranslatableText("ias.password"), this.width / 2 - 130, 96, -1);
+		drawCenteredText(ms, textRenderer, Text.literal(I18n.translate("ias.username")), this.width / 2 - 130, 66, -1);
+		drawCenteredText(ms, textRenderer, Text.literal(I18n.translate("ias.password")), this.width / 2 - 130, 96, -1);
 		if (error != null) {
 			for (int i = 0; i < error.size(); i++) {
 				textRenderer.drawWithShadow(ms, error.get(i), this.width / 2 - textRenderer.getWidth(error.get(i)) / 2, 114 + i * 10, 0xFFFF0000);
@@ -97,7 +97,7 @@ public class AbstractAccountGui extends Screen {
 	@Override
 	public void tick() {
 		complete.active = !username.getText().trim().isEmpty() && !logging;
-		complete.setMessage(!username.getText().trim().isEmpty() && password.getText().isEmpty()?this.title.copy().append(" ").append(new TranslatableText("ias.offline")):this.title);
+		complete.setMessage(!username.getText().trim().isEmpty() && password.getText().isEmpty()?this.title.copy().append(" ").append(Text.literal(I18n.translate("ias.offline"))):this.title);
 		username.active = password.active = !logging;
 		username.tick();
 		password.tick();
@@ -108,7 +108,7 @@ public class AbstractAccountGui extends Screen {
 		if (password.getText().isEmpty()) {
 			String name = username.getText();
 			if (Config.accounts.stream().anyMatch(acc -> acc.alias().equalsIgnoreCase(name))) {
-				error = textRenderer.wrapLines(new TranslatableText("ias.auth.alreadyexists"), width - 10);
+				error = textRenderer.wrapLines(Text.literal(I18n.translate("ias.auth.alreadyexists")), width - 10);
 				return;
 			}
 			logging = true;
@@ -131,7 +131,7 @@ public class AbstractAccountGui extends Screen {
 					MojangAccount ma = Auth.authMojang(name, pwd);
 					SkinRenderer.loadSkin(client, ma.alias(), ma.uuid(), false);
 					if (Config.accounts.stream().anyMatch(acc -> acc.alias().equalsIgnoreCase(name)))
-						throw new AuthException(new TranslatableText("ias.auth.alreadyexists"));
+						throw new AuthException(Text.literal(I18n.translate("ias.auth.alreadyexists")));
 					client.execute(() -> {
 						if (client.currentScreen == this) {
 							handler.accept(ma);
@@ -143,7 +143,7 @@ public class AbstractAccountGui extends Screen {
 					client.execute(() -> error = textRenderer.wrapLines(ae.getText(), width - 10));
 				} catch (Throwable t) {
 					IAS.LOG.warn("Unable to add account (unexpected exception)", t);
-					client.execute(() -> error = textRenderer.wrapLines(new TranslatableText("ias.auth.unknown", t.getLocalizedMessage()), width - 10));
+					client.execute(() -> error = textRenderer.wrapLines(Text.literal(I18n.translate("ias.auth.unknown", t.getLocalizedMessage())), width - 10));
 				}
 				logging = false;
 			}, "IAS Mojang Auth Thread").start();

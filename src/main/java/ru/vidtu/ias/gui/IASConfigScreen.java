@@ -1,5 +1,7 @@
 package ru.vidtu.ias.gui;
 
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.Text;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -7,8 +9,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
 import ru.vidtu.ias.Config;
 
 /**
@@ -20,20 +20,20 @@ public class IASConfigScreen extends Screen {
 	public CheckboxWidget caseS, mpscreen, titlescreen;
 	public TextFieldWidget textX, textY, btnX, btnY;
 	public IASConfigScreen(Screen prev) {
-		super(new LiteralText("config/ias.json"));
+		super(Text.literal("config/ias.json"));
 		this.prev = prev;
 	}
 	
 	@Override
 	public void init() {
-		addDrawableChild(caseS = new CheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("ias.cfg.casesensitive")) / 2 - 24, 40, 20, 20, new TranslatableText("ias.cfg.casesensitive"), Config.caseSensitiveSearch));
-		addDrawableChild(mpscreen = new CheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("ias.cfg.mpscreen")) / 2 - 24, 60, 20, 20, new TranslatableText("ias.cfg.mpscreen"), Config.showOnMPScreen));
-		addDrawableChild(titlescreen = new CheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("ias.cfg.titlescreen")) / 2 - 24, 80, 20, 20, new TranslatableText("ias.cfg.titlescreen"), Config.showOnTitleScreen));
-		addDrawableChild(textX = new TextFieldWidget(textRenderer, width / 2 - 100, 110, 98, 20, new LiteralText("X")));
-		addDrawableChild(textY = new TextFieldWidget(textRenderer, width / 2 + 2, 110, 98, 20, new LiteralText("Y")));
-		addDrawableChild(btnX = new TextFieldWidget(textRenderer, width / 2 - 100, 152, 98, 20, new LiteralText("X")));
-		addDrawableChild(btnY = new TextFieldWidget(textRenderer, width / 2 + 2, 152, 98, 20, new LiteralText("Y")));
-		addDrawableChild(new ButtonWidget(width / 2 - 75, height - 24, 150, 20, new TranslatableText("gui.done"), btn -> {
+		addDrawableChild(caseS = new CheckboxWidget(width / 2 - textRenderer.getWidth(Text.literal(I18n.translate("ias.cfg.casesensitive"))) / 2 - 24, 40, 20, 20, Text.literal(I18n.translate("ias.cfg.casesensitive")), Config.caseSensitiveSearch));
+		addDrawableChild(mpscreen = new CheckboxWidget(width / 2 - textRenderer.getWidth(Text.literal(I18n.translate("ias.cfg.mpscreen"))) / 2 - 24, 60, 20, 20, Text.literal(I18n.translate("ias.cfg.mpscreen")), Config.showOnMPScreen));
+		addDrawableChild(titlescreen = new CheckboxWidget(width / 2 - textRenderer.getWidth(Text.literal(I18n.translate("ias.cfg.titlescreen"))) / 2 - 24, 80, 20, 20, Text.literal(I18n.translate("ias.cfg.titlescreen")), Config.showOnTitleScreen));
+		addDrawableChild(textX = new TextFieldWidget(textRenderer, width / 2 - 100, 110, 98, 20, Text.literal("X")));
+		addDrawableChild(textY = new TextFieldWidget(textRenderer, width / 2 + 2, 110, 98, 20, Text.literal("Y")));
+		addDrawableChild(btnX = new TextFieldWidget(textRenderer, width / 2 - 100, 152, 98, 20, Text.literal("X")));
+		addDrawableChild(btnY = new TextFieldWidget(textRenderer, width / 2 + 2, 152, 98, 20, Text.literal("Y")));
+		addDrawableChild(new ButtonWidget(width / 2 - 75, height - 24, 150, 20, Text.literal(I18n.translate("gui.done")), btn -> {
 			client.setScreen(prev);
 		}));
 		textX.setText(StringUtils.trimToEmpty(Config.textX));
@@ -73,8 +73,8 @@ public class IASConfigScreen extends Screen {
 	public void render(MatrixStack ms, int mx, int my, float delta) {
 		renderBackground(ms);
 		drawCenteredText(ms, textRenderer, this.title, width / 2, 10, -1);
-		drawCenteredText(ms, textRenderer, new TranslatableText("ias.cfg.textpos"), width / 2, 100, -1);
-		if (titlescreen.isChecked()) drawCenteredText(ms, textRenderer, new TranslatableText("ias.cfg.btnpos"), width / 2, 142, -1);
+		drawCenteredText(ms, textRenderer, Text.literal(I18n.translate("ias.cfg.textpos")), width / 2, 100, -1);
+		if (titlescreen.isChecked()) drawCenteredText(ms, textRenderer, Text.literal(I18n.translate("ias.cfg.btnpos")), width / 2, 142, -1);
 		super.render(ms, mx, my, delta);
 	}
 }

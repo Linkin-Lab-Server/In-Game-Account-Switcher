@@ -9,8 +9,9 @@ import com.google.gson.JsonObject;
 import com.mojang.util.UUIDTypeAdapter;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.Session;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import ru.vidtu.ias.mixins.MinecraftClientAccessor;
 import ru.vidtu.ias.utils.Request;
 
@@ -67,7 +68,7 @@ public class MojangAccount implements Account {
 		req.addProperty("accessToken", accessToken);
 		req.addProperty("clientToken", UUIDTypeAdapter.fromUUID(clientToken));
 		r.post(req.toString());
-		if (r.response() < 200 || r.response() >= 300) throw new AuthException(new TranslatableText("ias.mojauth.unknown", r.error()));
+		if (r.response() < 200 || r.response() >= 300) throw new AuthException(Text.literal(I18n.translate("ias.mojauth.unknown", r.error())));
 		JsonObject resp = new Gson().fromJson(r.body(), JsonObject.class);
 		accessToken = resp.get("accessToken").getAsString();
 		clientToken = UUIDTypeAdapter.fromString(resp.get("clientToken").getAsString());

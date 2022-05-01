@@ -28,9 +28,7 @@ import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import ru.vidtu.ias.Config;
 import ru.vidtu.ias.account.Account;
@@ -58,7 +56,7 @@ public class GuiAccountSelector extends Screen {
 	private TextFieldWidget search;
 	
 	public GuiAccountSelector(Screen prev) {
-		super(new TranslatableText("ias.selectaccount"));
+		super(Text.literal(I18n.translate("ias.selectaccount")));
 		this.prev = prev;
 	}
 
@@ -66,14 +64,14 @@ public class GuiAccountSelector extends Screen {
 	protected void init() {
 		if (accountsgui == null) accountsgui = new AccountList(client, width, height);
 		addDrawableChild(accountsgui);
-		addDrawableChild(reloadskins = new ButtonWidget(2, 2, 120, 20, new TranslatableText("ias.reloadskins"), btn -> reloadSkins()));
-		addDrawableChild(new ButtonWidget(this.width / 2 + 4 + 40, this.height - 52, 120, 20, new TranslatableText("ias.addaccount"), btn -> add()));
-		addDrawableChild(login = new ButtonWidget(this.width / 2 - 154 - 10, this.height - 52, 120, 20, new TranslatableText("ias.login"), btn -> accountsgui.login()));
-		addDrawableChild(edit = new ButtonWidget(this.width / 2 - 40, this.height - 52, 80, 20, new TranslatableText("ias.edit"), btn -> accountsgui.edit()));
-		addDrawableChild(loginoffline = new ButtonWidget(this.width / 2 - 154 - 10, this.height - 28, 110, 20, new TranslatableText("ias.login").append(" ").append(new TranslatableText("ias.offline")), btn -> accountsgui.loginOffline()));
-		addDrawableChild(new ButtonWidget(this.width / 2 + 4 + 50, this.height - 28, 110, 20, new TranslatableText("gui.cancel"), btn -> client.setScreen(prev)));
-		addDrawableChild(delete = new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20, new TranslatableText("ias.delete"), btn -> accountsgui.delete()));
-		addDrawableChild(search = new TextFieldWidget(this.textRenderer, this.width / 2 - 80, 14, 160, 16, new TranslatableText("ias.search")));
+		addDrawableChild(reloadskins = new ButtonWidget(2, 2, 120, 20, Text.literal(I18n.translate("ias.reloadskins")), btn -> reloadSkins()));
+		addDrawableChild(new ButtonWidget(this.width / 2 + 4 + 40, this.height - 52, 120, 20, Text.literal(I18n.translate("ias.addaccount")), btn -> add()));
+		addDrawableChild(login = new ButtonWidget(this.width / 2 - 154 - 10, this.height - 52, 120, 20, Text.literal(I18n.translate("ias.login")), btn -> accountsgui.login()));
+		addDrawableChild(edit = new ButtonWidget(this.width / 2 - 40, this.height - 52, 80, 20, Text.literal(I18n.translate("ias.edit")), btn -> accountsgui.edit()));
+		addDrawableChild(loginoffline = new ButtonWidget(this.width / 2 - 154 - 10, this.height - 28, 110, 20, Text.literal(I18n.translate("ias.login")).append(" ").append(Text.literal(I18n.translate("ias.offline"))), btn -> accountsgui.loginOffline()));
+		addDrawableChild(new ButtonWidget(this.width / 2 + 4 + 50, this.height - 28, 110, 20, Text.literal(I18n.translate("gui.cancel")), btn -> client.setScreen(prev)));
+		addDrawableChild(delete = new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20, Text.literal(I18n.translate("ias.delete")), btn -> accountsgui.delete()));
+		addDrawableChild(search = new TextFieldWidget(this.textRenderer, this.width / 2 - 80, 14, 160, 16, Text.literal(I18n.translate("ias.search"))));
 	    updateButtons();
 	    search.setSuggestion(I18n.translate("ias.search"));
 	    accountsgui.resize(width, height);
@@ -111,12 +109,12 @@ public class GuiAccountSelector extends Screen {
 			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			Screen.drawTexture(ms, 8, height / 2 - 64 - 16, 0, 0, 64, 128, 64, 128);
 			Tools.drawBorderedRect(ms, width - 8 - 64, height / 2 - 64 - 16, width - 8, height / 2 + 64 - 16, 2, -5855578, -13421773);
-			if (acc.online()) drawTextWithShadow(ms, textRenderer, new TranslatableText("ias.premium"), width - 8 - 61, height / 2 - 64 - 13, 6618980);
-			else drawTextWithShadow(ms, textRenderer, new TranslatableText("ias.notpremium"), width - 8 - 61, height / 2 - 64 - 13, 16737380);
-			drawTextWithShadow(ms, textRenderer, new TranslatableText("ias.timesused"), width - 8 - 61, height / 2 - 64 - 15 + 12, -1);
+			if (acc.online()) drawTextWithShadow(ms, textRenderer, Text.literal(I18n.translate("ias.premium")), width - 8 - 61, height / 2 - 64 - 13, 6618980);
+			else drawTextWithShadow(ms, textRenderer, Text.literal(I18n.translate("ias.notpremium")), width - 8 - 61, height / 2 - 64 - 13, 16737380);
+			drawTextWithShadow(ms, textRenderer, Text.literal(I18n.translate("ias.timesused")), width - 8 - 61, height / 2 - 64 - 15 + 12, -1);
 			drawStringWithShadow(ms, textRenderer, String.valueOf(acc.uses()), width - 8 - 61, height / 2 - 64 - 15 + 21, -1);
 			if (acc.uses() > 0) {
-				drawTextWithShadow(ms, textRenderer, new TranslatableText("ias.lastused"), width - 8 - 61, height / 2 - 64 - 15 + 30, -1);
+				drawTextWithShadow(ms, textRenderer, Text.literal(I18n.translate("ias.lastused")), width - 8 - 61, height / 2 - 64 - 15 + 30, -1);
 				drawStringWithShadow(ms, textRenderer, DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
 						.format(Instant.ofEpochMilli(acc.lastUse()).atZone(ZoneId.systemDefault())) , width - 8 - 61, height / 2 - 64 - 15 + 39, -1);
 			}
@@ -138,7 +136,7 @@ public class GuiAccountSelector extends Screen {
 	 * Add an account
 	 */
 	private void add() {
-		client.setScreen(new AbstractAccountGui(this, new TranslatableText("ias.addaccount"), acc -> {
+		client.setScreen(new AbstractAccountGui(this, Text.literal(I18n.translate("ias.addaccount")), acc -> {
 			Config.accounts.add(acc);
 			Config.save(client);
 			accountsgui.updateAccounts();
@@ -249,7 +247,7 @@ public class GuiAccountSelector extends Screen {
 					error = ((AuthException) t).getText();
 				} else {
 					IAS.LOG.warn("Unable to login", t);
-					error = new TranslatableText("ias.auth.unknown", t.toString());
+					error = Text.literal(I18n.translate("ias.auth.unknown", t.toString()));
 				}
 			});
 		}
@@ -265,7 +263,7 @@ public class GuiAccountSelector extends Screen {
 		
 		public void edit() {
 			if (empty() || !getSelectedOrNull().account.editable()) return;
-			client.setScreen(new AbstractAccountGui(GuiAccountSelector.this, new TranslatableText("ias.editaccount"), acc -> {
+			client.setScreen(new AbstractAccountGui(GuiAccountSelector.this, Text.literal(I18n.translate("ias.editaccount")), acc -> {
 				Config.accounts.set(Config.accounts.indexOf(getSelectedOrNull().account), acc);
 			}));
 		}
@@ -280,7 +278,7 @@ public class GuiAccountSelector extends Screen {
 					updateAccounts();
 				}
 				client.setScreen(GuiAccountSelector.this);
-			}, new TranslatableText("ias.delete.title"), new TranslatableText("ias.delete.text", acc.alias())));
+			}, Text.literal(I18n.translate("ias.delete.title")), Text.literal(I18n.translate("ias.delete.text", acc.alias()))));
 		}
 		
 		public void swap(int first, int second) {
@@ -306,7 +304,7 @@ public class GuiAccountSelector extends Screen {
 		
 		@Override
 		public void render(MatrixStack ms, int i, int y, int x, int w, int h, int mx, int my, boolean hover, float delta) {
-			Text s = new LiteralText(account.alias());
+			Text s = Text.literal(account.alias());
 			int color = -1;
 			if (client.getSession().getUsername().equals(account.alias())) color = 0x00FF00;
 			drawTextWithShadow(ms, textRenderer, s, x + 10, y + 1, color);
@@ -397,7 +395,7 @@ public class GuiAccountSelector extends Screen {
 
 		@Override
 		public Text getNarration() {
-			return new LiteralText(account.alias());
+			return Text.literal(account.alias());
 		}
 		
 	}

@@ -99,7 +99,7 @@ public class SkinRenderer {
 				img = ImageIO.read(new URL(skinUrl));
 			} catch (Throwable t) {
 				try {
-					try (InputStream is = mc.getResourceManager().getResource(new Identifier("textures/entity/steve.png")).getInputStream()) {
+					try (InputStream is = mc.getResourceManager().getResource(new Identifier("textures/entity/steve.png")).get().getInputStream()) {
 						img = ImageIO.read(is);
 					}
 				} catch (Throwable th) {

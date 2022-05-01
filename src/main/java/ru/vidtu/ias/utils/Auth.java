@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.Text;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.gson.Gson;
@@ -12,7 +14,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.util.UUIDTypeAdapter;
 
-import net.minecraft.text.TranslatableText;
 import ru.vidtu.ias.account.AuthException;
 import ru.vidtu.ias.account.MojangAccount;
 import the_fireplace.ias.IAS;
@@ -117,7 +118,7 @@ public class Auth {
         req.addProperty("RelyingParty", "rp://api.minecraftservices.com/");
         req.addProperty("TokenType", "JWT");
         pr.post(req.toString()); //Note: Here we're encoding parameters as JSON. ('key': 'value')
-        if (pr.response() == 401) throw new AuthException(new TranslatableText("ias.msauth.error.noxbox"));
+        if (pr.response() == 401) throw new AuthException(Text.literal(I18n.translate("ias.msauth.error.noxbox")));
         if (pr.response() < 200 || pr.response() >= 300) throw new IllegalArgumentException("authXSTS response: " + pr.response());
         JsonObject resp = IAS.GSON.fromJson(pr.body(), JsonObject.class);
         return Pair.of(resp.get("Token").getAsString(), resp.getAsJsonObject("DisplayClaims")
@@ -157,7 +158,7 @@ public class Auth {
 		pr.header("Authorization", "Bearer " + accessToken);
 		pr.get(); //Note: Here we're using GET, not POST.
 		if (pr.response() < 200 || pr.response() >= 300) throw new IllegalArgumentException("checkGameOwnership response: " + pr.response());
-        if (IAS.GSON.fromJson(pr.body(), JsonObject.class).getAsJsonArray("items").size() == 0) throw new AuthException(new TranslatableText("ias.msauth.error.gamenotowned"));
+        if (IAS.GSON.fromJson(pr.body(), JsonObject.class).getAsJsonArray("items").size() == 0) throw new AuthException(Text.literal(I18n.translate("ias.msauth.error.gamenotowned")));
     }
     
     /**
@@ -205,31 +206,31 @@ public class Auth {
 				jo = new Gson().fromJson(reqerr, JsonObject.class);
 			} catch (Exception ex) {
 				if (reqerr.toLowerCase().contains("cloudfront")) {
-					throw new AuthException(new TranslatableText("ias.mojauth.toofast"), reqerr); //CloudFront DoS/DDoS protection.
+					throw new AuthException(Text.literal(I18n.translate("ias.mojauth.toofast")), reqerr); //CloudFront DoS/DDoS protection.
 				}
-				throw new AuthException(new TranslatableText("ias.mojauth.unknown", reqerr), reqerr);
+				throw new AuthException(Text.literal(I18n.translate("ias.mojauth.unknown", reqerr)), reqerr);
 			} 
 			String err = jo.get("error").getAsString();
 			if (err.equals("ForbiddenOperationException")) {
 				String msg = jo.get("errorMessage").getAsString();
 				if (msg.equals("Invalid credentials. Invalid username or password.")) {
-					throw new AuthException(new TranslatableText("ias.mojauth.invalidcreds"), jo.toString());
+					throw new AuthException(Text.literal(I18n.translate("ias.mojauth.invalidcreds")), jo.toString());
 				}
 				if (msg.equals("Invalid credentials.")) {
-					throw new AuthException(new TranslatableText("ias.mojauth.toofast"), jo.toString());
+					throw new AuthException(Text.literal(I18n.translate("ias.mojauth.toofast")), jo.toString());
 				}
 			}
 			if (err.equals("ResourceException")) {
-				throw new AuthException(new TranslatableText("ias.mojauth.migrated"), jo.toString());
+				throw new AuthException(Text.literal(I18n.translate("ias.mojauth.migrated")), jo.toString());
 			}
-			throw new AuthException(new TranslatableText("ias.mojauth.unknown", jo.toString()));
+			throw new AuthException(Text.literal(I18n.translate("ias.mojauth.unknown", jo.toString())));
 		}
 		JsonObject resp = new Gson().fromJson(r.body(), JsonObject.class);
 		String accessToken = resp.get("accessToken").getAsString();
 		UUID respClientToken = UUIDTypeAdapter.fromString(resp.get("clientToken").getAsString());
 		if (!respClientToken.equals(clientToken))
-			throw new AuthException(new TranslatableText("ias.mojauth.unknown",
-					"Response token " + respClientToken + " is not equals to sent token " + clientToken));
+			throw new AuthException(Text.literal(I18n.translate("ias.mojauth.unknown",
+					"Response token " + respClientToken + " is not equals to sent token " + clientToken)));
 		UUID uuid = UUIDTypeAdapter.fromString(resp.getAsJsonObject("selectedProfile").get("id").getAsString());
 		String username = resp.getAsJsonObject("selectedProfile").get("name").getAsString();
 		return new MojangAccount(username, accessToken, clientToken, uuid);
